@@ -1,0 +1,17 @@
+services:
+  api:
+    build: .
+    container_name: taskerha-api
+    restart: unless-stopped
+    environment:
+      - PORT=3000
+      - REQUIRE_CF=true
+      - APP_TOKEN=${APP_TOKEN}
+      - ADMIN_KEY=${ADMIN_KEY}
+    volumes:
+      - ./data:/app/data
+
+networks:
+  npm_network:
+    external: true
+    name: nginx-proxy-manager_default
