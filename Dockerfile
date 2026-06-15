@@ -1,16 +1,15 @@
 FROM node:22-alpine
 
-# Required to compile better-sqlite3 native module
+# Native module build tools
 RUN apk add --no-cache python3 make g++
 
-RUN npm install -g pnpm
+RUN npm install -g pnpm node-gyp
 
 WORKDIR /app
 
 COPY package.json pnpm-lock.yaml ./
-# --ignore-scripts skips the pnpm build-approval check; we rebuild the native module explicitly
 RUN pnpm install --frozen-lockfile --prod --ignore-scripts
-RUN pnpm rebuild better-sqlite3
+RUN cd /app/node_modules/better-sqlite3 && node-gyp rebuild
 
 COPY src/ ./src/
 
