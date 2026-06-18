@@ -2,8 +2,7 @@ import 'dotenv/config';
 import Fastify from 'fastify';
 import pingRoute from './routes/ping.js';
 import statsRoute from './routes/stats.js';
-import fdroidRoute from './routes/fdroid.js';
-import installCountRoute from './routes/installCount.js';
+import dataRoute from './routes/data.js';
 
 const REQUIRE_CF = process.env.REQUIRE_CF === 'true';
 const APP_TOKEN  = process.env.APP_TOKEN;
@@ -11,7 +10,7 @@ const APP_TOKEN  = process.env.APP_TOKEN;
 const fastify = Fastify({ logger: true });
 
 // Public routes that bypass the app-token guard
-const PUBLIC_ROUTES = new Set(['/fdroid-version', '/install-count']);
+const PUBLIC_ROUTES = new Set(['/data']);
 
 // Cloudflare + app-token guard on every request
 fastify.addHook('onRequest', async (request, reply) => {
@@ -26,8 +25,7 @@ fastify.addHook('onRequest', async (request, reply) => {
 
 await fastify.register(pingRoute);
 await fastify.register(statsRoute);
-await fastify.register(fdroidRoute);
-await fastify.register(installCountRoute);
+await fastify.register(dataRoute);
 
 const host = process.env.HOST || '0.0.0.0';
 const port = Number(process.env.PORT) || 3000;

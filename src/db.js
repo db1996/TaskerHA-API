@@ -19,6 +19,12 @@ db.exec(`
     last_seen_version TEXT  NOT NULL
   );
   CREATE INDEX IF NOT EXISTS idx_last_seen ON devices (last_seen);
+
+  CREATE TABLE IF NOT EXISTS versions (
+    key        TEXT PRIMARY KEY,
+    version    TEXT NOT NULL,
+    fetched_at INTEGER NOT NULL
+  );
 `);
 
 export default db;
